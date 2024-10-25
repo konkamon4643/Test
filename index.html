@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางแสดงข้อมูล</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        tr:hover td {
+            background-color: #e9ecef;
+        }
+        .total {
+            background-color: #ffeb3b;
+            font-weight: bold;
+        }
+        .input-area {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-area textarea {
+            width: 100%;
+            max-width: 600px;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+            .input-area textarea {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>ตารางแปลงข้อมูล</h2>
+
+<!-- ตารางข้อมูลหลัก -->
+<table id="mainTable">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Order Time</th>
+            <th>Pair</th>
+            <th>SIDE</th>
+            <th>Price</th>
+            <th>Average</th>
+            <th>Coin</th>
+            <th class="total">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- สร้างแถว 14 แถว -->
+        <tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>6</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>8</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>12</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>13</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+        <tr><td>14</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="total"></td></tr>
+    </tbody>
+</table>
+
+<!-- ช่องสำหรับกรอกหรือวางข้อมูล -->
+<div class="input-area">
+    <label for="dataInput">วางข้อมูลที่นี่:</label>
+    <textarea id="dataInput" placeholder="วางข้อมูลที่นี่" oninput="checkData()"></textarea>
+</div>
+
+<button onclick="copyConvertedData()">คัดลอกข้อมูลที่แปลงแล้ว</button>
+<button onclick="clearTable()">ล้างตาราง</button>
+
+<script>
+// ฟังก์ชันสำหรับการตรวจสอบข้อมูลใน textarea
+function checkData() {
+    const data = document.getElementById('dataInput').value.trim().split('\n');
+
+    // ถ้ามีข้อมูลที่อ่านได้แล้ว
+    if (data.length >= 11) {
+        processData(data);
+    }
+}
+
+// ฟังก์ชันสำหรับการแปลงข้อมูลและเพิ่มลงในตาราง
+function processData(data) {
+    const orderTime = data[1].trim(); // วันที่และเวลา
+    const pair = data[2].trim();       // คู่เหรียญ
+    const average = data[5].trim();    // Average
+    const coin = data[7].trim();       // Coin
+
+    // อ่าน Total จากบรรทัดสุดท้ายที่เป็นตัวเลข (ข้ามบรรทัดที่มีคำว่า "Market")
+    let total = '';
+    for (let i = data.length - 1; i >= 0; i--) {
+        const line = data[i].trim();
+        if (line.includes("Market")) {
+            continue; // ข้ามบรรทัดที่มีคำว่า "Market"
+        }
+        if (!line.includes('-') && !isNaN(line) && line !== '') {
+            total = line;
+            break;
+        }
+    }
+
+    // หาบรรทัดแรกที่ว่างสำหรับข้อมูลใหม่
+    const table = document.getElementById('mainTable');
+    let rowIndex = 1; // เริ่มที่แถวที่ 1
+    while (rowIndex < table.rows.length && table.rows[rowIndex].cells[1].textContent !== '') {
+        rowIndex++; // ขยับไปแถวถัดไปจนกว่าจะพบแถวว่าง
+    }
+
+    // ถ้าแถวเต็มแล้วจะไม่ทำอะไร
+    if (rowIndex >= table.rows.length) {
+        alert("ไม่มีแถวว่างให้เพิ่มข้อมูล");
+        return;
+    }
+
+    // อัพเดตข้อมูลในแถวที่ว่าง
+    const row = table.rows[rowIndex]; 
+
+    // อัพเดตข้อมูลในแถว
+    row.cells[1].textContent = orderTime;  // อัพเดต Order Time
+    row.cells[2].textContent = pair;       // อัพเดต Pair
+    row.cells[3].textContent = '';         // ทำให้ช่อง SIDE ว่าง
+    row.cells[4].textContent = '';         // ทำให้ช่อง Price ว่าง
+    row.cells[5].textContent = average;    // อัพเดต Average
+    row.cells[6].textContent = coin;       // อัพเดต Coin
+    row.cells[7].textContent = total;      // อัพเดต Total
+
+    // เคลียร์ textarea หลังจากเพิ่มข้อมูลแล้ว
+    document.getElementById('dataInput').value = '';
+
+    // ตรวจสอบข้อมูลที่เหลือใน textarea และอ่านต่อ
+    const remainingData = data.slice(11); // ข้อมูลที่เหลือหลังจากอ่านแล้ว
+    if (remainingData.length > 0) {
+        processData(remainingData);
+    }
+}
+
+// ฟังก์ชันสำหรับคัดลอกข้อมูลที่แปลงแล้วในตารางไปยังคลิปบอร์ด
+function copyConvertedData() {
+    const table = document.getElementById('mainTable');
+    let text = '';
+
+    // สร้างข้อความจากตารางเฉพาะแถวที่มีข้อมูล
+    for (let i = 1; i < table.rows.length; i++) { // เริ่มจากแถวที่ 1
+        const row = table.rows[i];
+        if (row.cells[1].textContent !== '') { // ตรวจสอบว่ามีข้อมูลในแถว
+            const cells = Array.from(row.cells).slice(1).map(cell => cell.textContent).join('\t'); // ข้ามเลขแถว
+            text += cells + '\n';
+        }
+    }
+
+    // คัดลอกข้อความไปยังคลิปบอร์ด
+    navigator.clipboard.writeText(text).then(() => {
+        alert('คัดลอกข้อมูลที่แปลงแล้วเรียบร้อยแล้ว');
+    }).catch(err => {
+        alert('เกิดข้อผิดพลาดในการคัดลอกข้อมูล');
+    });
+}
+
+// ฟังก์ชันสำหรับล้างข้อมูลในตาราง
+function clearTable() {
+    const table = document.getElementById('mainTable');
+    for (let i = 1; i < table.rows.length; i++) { // เริ่มจากแถวที่ 1
+        const row = table.rows[i];
+        for (let j = 1; j < row.cells.length; j++) { // เริ่มจากเซลล์ที่ 1
+            row.cells[j].textContent = ''; // ล้างข้อมูลในเซลล์
+        }
+    }
+    document.getElementById('dataInput').value = ''; // เคลียร์ textarea
+}
+</script>
+</body>
+</html>
